@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('auth')->group(function () {
-    Route::post('validate-matricule', [MatriculeController::class, 'store']);
+
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
 
@@ -24,6 +24,8 @@ Route::prefix('auth')->group(function () {
             Route::get('users/{id}', [AuthController::class, 'show']);
             Route::put('users/{id}', [AuthController::class, 'update']);
             Route::delete('users/{id}', [AuthController::class, 'destroy']);
+            Route::put('/suspend/{user}', [AuthController::class, 'suspendUser']);
+            Route::put('/reactivate/{user}', [AuthController::class, 'reactivateUser']);
         });
     });
 

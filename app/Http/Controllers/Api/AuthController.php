@@ -30,7 +30,7 @@ class AuthController extends Controller
             'role' => 'required|in:admin,user',
         ]);
 
-        
+
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -186,5 +186,37 @@ class AuthController extends Controller
             return response()->json(['error' => 'Erreur lors de la suppression de l\'utilisateur'], 500);
         }
     }
-    
+
+    public function suspendUser($id)
+    {
+        // Récupérer l'utilisateur par son ID
+        $user = User::find($id);
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+
+        // Changer l'état de l'utilisateur à 0 (suspendu)
+        $user->etat = 0;
+        $user->save();
+
+        return response()->json(['message' => 'Utilisateur suspendu avec succès'], 200);
+    }
+    //Methode pour reactiver un utilisateur
+    public function reactivateUser($id)
+    {
+        // Récupérer l'utilisateur par son ID
+        $user = User::find($id);
+
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+
+        // Changer l'état de l'utilisateur à 1 (actif)
+        $user->etat = 1;
+        $user->save();
+
+        return response()->json(['message' => 'Utilisateur réactivé avec succès'], 200);
+    }
 }
