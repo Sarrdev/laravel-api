@@ -73,9 +73,13 @@ class AuthController extends Controller
             $token = $user->createToken('MyApp')->plainTextToken;
 
             return response()->json([
-                'message' => 'Connexion réussie',
-                'role' => $user->role, // tu peux retourner le rôle pour que le frontend redirige
-                'token' => $token
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'role' => $user->role
+                ]
             ]);
         }
 
@@ -96,23 +100,18 @@ class AuthController extends Controller
     }
 
     // Profil de l'utilisateur connecté
-    public function profile()
+    public function profile(Request $request)
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            return response()->json([
-                "status" => false,
-                "message" => "Utilisateur non authentifié",
-                "data" => null
-            ], 401);
-        }
+        // L'utilisateur est déjà authentifié via Sanctum
+        $user = $request->user();
 
         return response()->json([
-            "status" => true,
-            "message" => "Profil de l'utilisateur",
-            "data" => $user
-        ], 200);
+            'data' => [
+                'name'  => $user->name,
+                'email' => $user->email,
+                'role'  => $user->role, // Assure-toi que "role" est dans ton modèle User
+            ]
+        ]);
     }
 
 
@@ -126,7 +125,11 @@ class AuthController extends Controller
     {
         try {
             $users = User::all();
-            return response()->json($users);
+            return response()->json([
+                'status' => true,
+                'message' => 'Liste des utilisateurs récupérée avec succès',
+                'data' => $users
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur lors de la récupération des utilisateurs'], 500);
         }
@@ -136,7 +139,11 @@ class AuthController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            return response()->json($user);
+            return response()->json([
+                'status' => true,
+                'message' => 'Utilisateur récupéré avec succès',
+                'data' => $user
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
@@ -219,4 +226,6 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Utilisateur réactivé avec succès'], 200);
     }
+
+    
 }

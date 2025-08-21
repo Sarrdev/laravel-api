@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('matricule')->unique();
             $table->string('telephone')->nullable();
             $table->string('fonction')->nullable();
-            $table->string('role')->default('user'); 
+            $table->enum('role', ['admin', 'user']);
             $table->string('password');
             $table->boolean('etat')->default(false); // true for active, false for inactive
             $table->rememberToken();
