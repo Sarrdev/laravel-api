@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proces_verbals', function (Blueprint $table) {
+        Schema::create('proce_verbals', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
             $table->longText('contenu')->nullable(); // contenu détaillé du PV
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proces_verbals');
+        Schema::dropIfExists('proce_verbals');
     }
 };

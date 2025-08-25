@@ -38,14 +38,10 @@ Route::prefix('auth')->group(function () {
 
             //Gestion des procès-verbaux
             Route::get('proces-verbaux', [ProcesVerbalController::class, 'index']);
+            Route::put('proces-verbaux/{id}', [ProcesVerbalController::class, 'update']);
             Route::post('create', [ProcesVerbalController::class, 'store']);
             Route::get('proces-verbaux/{id}', [ProcesVerbalController::class, 'show']);
-            Route::put('proces-verbaux/{id}', [ProcesVerbalController::class, 'update']);
             Route::delete('proces-verbaux/{id}', [ProcesVerbalController::class, 'destroy']);
         });
-
-
-
     });
-
 });

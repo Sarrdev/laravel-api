@@ -9,7 +9,7 @@ class ProcesVerbal extends Model
 {
     use HasFactory;
 
-    protected $table = 'proces_verbaux';
+    protected $table = 'proce_verbals';
 
     protected $fillable = [
         'titre',
