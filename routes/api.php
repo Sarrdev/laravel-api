@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BoiteIdeeController;
 use App\Http\Controllers\Api\ConvocationController;
 use App\Http\Controllers\Api\MatriculeController;
 use App\Http\Controllers\Api\ProcesVerbalController;
+use App\Http\Controllers\Api\NoteServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,9 +41,35 @@ Route::prefix('auth')->group(function () {
             //Gestion des procès-verbaux
             Route::get('proces-verbaux', [ProcesVerbalController::class, 'index']);
             Route::put('proces-verbaux/{id}', [ProcesVerbalController::class, 'update']);
-            Route::post('create', [ProcesVerbalController::class, 'store']);
+            Route::post('proces-verbal', [ProcesVerbalController::class, 'store']);
             Route::get('proces-verbaux/{id}', [ProcesVerbalController::class, 'show']);
             Route::delete('proces-verbaux/{id}', [ProcesVerbalController::class, 'destroy']);
+
+            //Gestion des notes de service
+            Route::get('note-services', [NoteServiceController::class, 'index']);
+            Route::put('note-service/{id}', [NoteServiceController::class, 'update']);
+            Route::post('note-service', [NoteServiceController::class, 'store']);
+            Route::get('note-service/{id}', [NoteServiceController::class, 'show']);
+            Route::delete('note-service/{id}', [NoteServiceController::class, 'destroy']);
+
+            Route::get('/boite-idees', [BoiteIdeeController::class, 'index']);
+            Route::get('/boite-idees/{id}', [BoiteIdeeController::class, 'show']);
+            Route::patch('/boite-idees/{id}/statut', [BoiteIdeeController::class, 'updateStatut']);
+        });
+
+        Route::middleware('user')->group(function () {
+            Route::put('users/{id}', [AuthController::class, 'update']);
+            Route::get('convocations', [ConvocationController::class, 'index']);
+            Route::get('proces-verbaux', [ProcesVerbalController::class, 'index']);
+            Route::get('note-services', [NoteServiceController::class, 'index']);
+
+            //gestion boite à idées
+            Route::post('/boite-idees', [BoiteIdeeController::class, 'store']);
+            Route::get('/boite-idees', [BoiteIdeeController::class, 'index']);
+            Route::put('/boite-idees/{id}', [BoiteIdeeController::class, 'update']);
+            Route::get('/boite-idees/{id}', [BoiteIdeeController::class, 'show']);
+            Route::delete('/boite-idees/{id}', [BoiteIdeeController::class, 'destroy']);
+            Route::patch('/boite-idees/{id}/statut', [BoiteIdeeController::class, 'updateStatut']);
         });
     });
 });
